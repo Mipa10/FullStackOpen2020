@@ -42,7 +42,7 @@ const App = (props) => {
       {props.anecdotes[selected]}
       <br />
       <h2>Votes {points[selected]}</h2>
-      <button onClick={voteAnecdote} anecdoteIndex={selected}>
+      <button onClick={voteAnecdote}>
         Vote
       </button>
       <button onClick={setNewAnecdote}>next anecdote</button>
