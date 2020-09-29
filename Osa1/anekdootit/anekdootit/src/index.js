@@ -34,7 +34,7 @@ const App = (props) => {
       indexOfMostPoints
     )
       
-    
+
   };
 
   return (
