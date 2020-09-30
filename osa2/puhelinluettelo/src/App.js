@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import Filter from "./components/Filter";
+import PersonForm from "./components/PersonForm"
+import Persons from './components/Persons'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -9,12 +12,11 @@ const App = () => {
   ]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
-  const [filter, setFilter] = useState("")
+  const [filter, setFilter] = useState("");
 
   const handleFilterChange = (event) => {
-    setFilter(event.target.value)
-
-  }
+    setFilter(event.target.value);
+  };
 
   const handleNameChange = (event) => {
     setNewName(event.target.value);
@@ -22,7 +24,6 @@ const App = () => {
   const handleNumberChange = (event) => {
     setNewNumber(event.target.value);
   };
-
 
   const handleSaveClick = (event) => {
     event.preventDefault();
@@ -35,37 +36,26 @@ const App = () => {
       };
       setPersons(persons.concat(nameObject));
       setNewName("");
-      setNewNumber("")
+      setNewNumber("");
     }
   };
 
-  const personsToShow = () => {
-    return filter === "" ? persons : persons.filter(person => person.name.toUpperCase().includes(filter.toUpperCase()))
-  }
+ 
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <input onChange={handleFilterChange} placeholder="Search for name"/>
+      <Filter onChange={handleFilterChange} />
       <h2>Add a new</h2>
-      <form>
-        <div>
-          name: <input value={newName} onChange={handleNameChange} />
-          <br />
-          number: <input value={newNumber} onChange={handleNumberChange} />
-        </div>
-        <div>
-          <button onClick={handleSaveClick} type="submit">
-            add
-          </button>
-        </div>
-      </form>
+      <PersonForm 
+        newName={newName}
+        newNumber={newNumber}
+        handleNameChange={handleNameChange}
+        handleNumberChange={handleNumberChange}
+        handleSaveClick={handleSaveClick}
+      />
       <h2>Numbers</h2>
-      {personsToShow().map((person) => {
-        return (
-          <p key={person.name}>{person.name} {person.number}</p>
-        )
-      })}
+      <Persons persons={persons} filter={filter}/>
     </div>
   );
 };
