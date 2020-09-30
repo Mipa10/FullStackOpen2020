@@ -13,7 +13,7 @@ const Persons = (props) => {
 
   return (
     <div>
-      {personsToShow().map((person) => {    
+      {personsToShow().map((person) => {
         return (
           <p key={person.name}>
             {person.name} {person.number}

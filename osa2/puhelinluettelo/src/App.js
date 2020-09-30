@@ -1,18 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+
 import Filter from "./components/Filter";
-import PersonForm from "./components/PersonForm"
-import Persons from './components/Persons'
+import PersonForm from "./components/PersonForm";
+import Persons from "./components/Persons";
 
 const App = () => {
   const [persons, setPersons] = useState([
     { name: "Arto Hellas", number: "040-123456" },
     { name: "Ada Lovelace", number: "39-44-5323523" },
     { name: "Dan Abramov", number: "12-43-234345" },
-    { name: "Mary Poppendieck", number: "39-23-6423122" },
+  
   ]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
+
+  useEffect(() => {
+    console.log('useEffectin siältä');
+    
+    axios.get("http://localhost:3001/persons").then((response) => {
+      console.log(response.data);
+      setPersons(response.data)
+    });
+  }, []);
 
   const handleFilterChange = (event) => {
     setFilter(event.target.value);
@@ -40,14 +51,12 @@ const App = () => {
     }
   };
 
- 
-
   return (
     <div>
       <h2>Phonebook</h2>
       <Filter onChange={handleFilterChange} />
       <h2>Add a new</h2>
-      <PersonForm 
+      <PersonForm
         newName={newName}
         newNumber={newNumber}
         handleNameChange={handleNameChange}
@@ -55,7 +64,7 @@ const App = () => {
         handleSaveClick={handleSaveClick}
       />
       <h2>Numbers</h2>
-      <Persons persons={persons} filter={filter}/>
+      <Persons persons={persons} filter={filter} />
     </div>
   );
 };
