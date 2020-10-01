@@ -37,9 +37,9 @@ function App() {
 
   const handleFilterChange = (event) => {
     setFilter(event.target.value);
-    const listOfCountries = countries.filter((country) =>
-      country.name.toUpperCase().includes(filter.toUpperCase())
-    );
+    const listOfCountries = countries.filter((country) => {
+      return country.name.toUpperCase().includes(filter.toUpperCase());
+    });
     setResults(listOfCountries);
   };
 
@@ -47,19 +47,13 @@ function App() {
     setResults([country]);
   };
 
-  
   return (
     <div>
       <p>
         Find countries
         <input onChange={handleFilterChange} value={filter} />
       </p>
-      <Results
-        onClick={handleShowClick}
-        countries={countries}
-        results={results}
-        filter={filter}
-      />
+      <Results onClick={handleShowClick} results={results} filter={filter} />
     </div>
   );
 }
