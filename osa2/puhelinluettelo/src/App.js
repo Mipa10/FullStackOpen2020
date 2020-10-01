@@ -1,28 +1,18 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import phonebook from "./services/phonebook";
 
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: "Arto Hellas", number: "040-123456" },
-    { name: "Ada Lovelace", number: "39-44-5323523" },
-    { name: "Dan Abramov", number: "12-43-234345" },
-  
-  ]);
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
 
   useEffect(() => {
-    console.log('useEffectin siältä');
-    
-    axios.get("http://localhost:3001/persons").then((response) => {
-      console.log(response.data);
-      setPersons(response.data)
-    });
+    phonebook.getAll().then((response) => setPersons(response));
   }, []);
 
   const handleFilterChange = (event) => {
@@ -36,6 +26,15 @@ const App = () => {
     setNewNumber(event.target.value);
   };
 
+  const handleDelete = async (id) => {
+    const name = persons.find((person) => id === person.id);
+    if (window.confirm(`poistetaanko ${name.name}`)) {
+      await phonebook.del(id);
+      phonebook.getAll().then((response) => setPersons(response));
+      setNewName("");
+    }
+  };
+
   const handleSaveClick = (event) => {
     event.preventDefault();
     if (persons.some((person) => person.name === newName)) {
@@ -45,9 +44,9 @@ const App = () => {
         name: newName,
         number: newNumber,
       };
-      axios.post("http://localhost:3001/persons", nameObject).then(response => setPersons(persons.concat(response.data))
-      )
-      
+      phonebook
+        .create(nameObject)
+        .then((response) => setPersons(persons.concat(response)));
       setNewName("");
       setNewNumber("");
     }
@@ -66,7 +65,7 @@ const App = () => {
         handleSaveClick={handleSaveClick}
       />
       <h2>Numbers</h2>
-      <Persons persons={persons} filter={filter} />
+      <Persons persons={persons} filter={filter} handleDelete={handleDelete} />
     </div>
   );
 };
