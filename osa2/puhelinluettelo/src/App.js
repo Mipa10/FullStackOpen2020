@@ -35,10 +35,37 @@ const App = () => {
     }
   };
 
+  const handleUpdate = (id, nameObject) => {
+    console.log("täällä kans");
+    console.log("id", id);
+
+    phonebook.update(id, nameObject).then((changedObject) => {
+      console.log(changedObject);
+
+      const newPersons = persons.map((person) =>
+        person.id !== id ? person : changedObject
+      );
+      setPersons(newPersons);
+    });
+  };
+
   const handleSaveClick = (event) => {
     event.preventDefault();
-    if (persons.some((person) => person.name === newName)) {
-      alert(`${newName} is already added to phonebook`);
+    if (
+      persons.some((person) => person.name === newName) &&
+      window.confirm(
+        `${newName} is already added to phonebook, replace the old number with new one?`
+      )
+    ) {
+      const nameObject = {
+        name: newName,
+        number: newNumber,
+      };
+      persons.forEach((person) => {
+        if (person.name === newName) {
+          handleUpdate(person.id, nameObject);
+        }
+      });
     } else {
       const nameObject = {
         name: newName,
