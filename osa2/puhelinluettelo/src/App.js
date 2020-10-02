@@ -11,8 +11,8 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
-  const [message, setMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [message, setMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
     phonebook.getAll().then((response) => setPersons(response));
@@ -30,42 +30,46 @@ const App = () => {
   };
 
   const handleDelete = async (personToDelete) => {
-    
     if (window.confirm(`poistetaanko ${personToDelete.name}`)) {
-      await phonebook.del(personToDelete).then(response=>console.log(response)
-      ).catch((error) => {
-        setErrorMessage(
-          `information of ${personToDelete.name} has already been removed from server`
-        );
-      });
+      await phonebook
+        .del(personToDelete)
+        .catch((error) => {
+          console.log(error)
+          setErrorMessage(
+            `information of ${personToDelete.name} has already been removed from server`
+          );
+          setTimeout(() => {
+            setErrorMessage(null);
+          }, 3000);
+        });
     }
     phonebook.getAll().then((response) => setPersons(response));
     setNewName("");
   };
 
-  const handleUpdate = (id, nameObject) => {
-    console.log(id);
+  const handleUpdate = (personToBeUpdated, nameObject) => {
     if (
       window.confirm(
         `${newName} is already added to phonebook, replace the old number with new one?`
       )
     ) {
       phonebook
-        .update(id, nameObject)
+        .update(personToBeUpdated.id, nameObject)
         .then((changedObject) => {
-          console.log(changedObject);
-
           const newPersons = persons.map((person) =>
-            person.id !== id ? person : changedObject
+            person.id !== personToBeUpdated.id ? person : changedObject
           );
           setPersons(newPersons);
         })
         .catch((error) => {
-          console.log(error)
+          console.log(error);
           setErrorMessage(
-            `information of has already been removed from server`
+            `information of ${personToBeUpdated.name} has already been removed from server`
           );
-          setPersons(persons.filter((n) => n.id !== id));
+          setTimeout(() => {
+            setErrorMessage(null);
+          }, 3000);
+          setPersons(persons.filter((n) => n.id !== personToBeUpdated.id));
         });
     } else {
       return null;
@@ -80,14 +84,14 @@ const App = () => {
     };
     if (persons.some((person) => person.name === newName)) {
       const personToUpdate = persons.find((person) => person.name === newName);
-      handleUpdate(personToUpdate.id, nameObject);
+      handleUpdate(personToUpdate, nameObject);
     } else {
       phonebook
         .create(nameObject)
         .then((response) => setPersons(persons.concat(response)));
       setMessage(`Added ${nameObject.name}`);
       setTimeout(() => {
-        setMessage("");
+        setMessage(null);
       }, 3000);
       setNewName("");
       setNewNumber("");
