@@ -32,7 +32,14 @@ const App = () => {
   const handleDelete = async (personToDelete) => {
     if (window.confirm(`poistetaanko ${personToDelete.name}`)) {
       await phonebook
-        .del(personToDelete)
+        .del(personToDelete).then(response => {
+          setMessage(`${personToDelete.name} is deleted from phonebook`);
+          setTimeout(() => {
+            setMessage(null);
+          }, 3000);
+        }
+      
+        )
         .catch((error) => {
           console.log(error)
           setErrorMessage(
@@ -60,6 +67,10 @@ const App = () => {
             person.id !== personToBeUpdated.id ? person : changedObject
           );
           setPersons(newPersons);
+          setMessage(`${personToBeUpdated.name} number is updated.`);
+      setTimeout(() => {
+        setMessage(null);
+      }, 3000);
         })
         .catch((error) => {
           console.log(error);
