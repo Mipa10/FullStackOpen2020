@@ -4,12 +4,15 @@ import phonebook from "./services/phonebook";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
+  const [message, setMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     phonebook.getAll().then((response) => setPersons(response));
@@ -27,53 +30,64 @@ const App = () => {
   };
 
   const handleDelete = async (id) => {
-    const name = persons.find((person) => id === person.id);
-    if (window.confirm(`poistetaanko ${name.name}`)) {
-      await phonebook.del(id);
-      phonebook.getAll().then((response) => setPersons(response));
-      setNewName("");
+    const personToBeDeleted = persons.find((person) => id === person.id);
+    if (window.confirm(`poistetaanko ${personToBeDeleted.name}`)) {
+      await phonebook.del(id).catch((error) => {
+        setErrorMessage(
+          `information of ${personToBeDeleted.name} has already been removed from server`
+        );
+      });
     }
+    phonebook.getAll().then((response) => setPersons(response));
+    setNewName("");
   };
 
   const handleUpdate = (id, nameObject) => {
-    console.log("täällä kans");
-    console.log("id", id);
-
-    phonebook.update(id, nameObject).then((changedObject) => {
-      console.log(changedObject);
-
-      const newPersons = persons.map((person) =>
-        person.id !== id ? person : changedObject
-      );
-      setPersons(newPersons);
-    });
-  };
-
-  const handleSaveClick = (event) => {
-    event.preventDefault();
+    console.log(id);
     if (
-      persons.some((person) => person.name === newName) &&
       window.confirm(
         `${newName} is already added to phonebook, replace the old number with new one?`
       )
     ) {
-      const nameObject = {
-        name: newName,
-        number: newNumber,
-      };
-      persons.forEach((person) => {
-        if (person.name === newName) {
-          handleUpdate(person.id, nameObject);
-        }
-      });
+      phonebook
+        .update(id, nameObject)
+        .then((changedObject) => {
+          console.log(changedObject);
+
+          const newPersons = persons.map((person) =>
+            person.id !== id ? person : changedObject
+          );
+          setPersons(newPersons);
+        })
+        .catch((error) => {
+          console.log(error)
+          setErrorMessage(
+            `information of has already been removed from server`
+          );
+          setPersons(persons.filter((n) => n.id !== id));
+        });
     } else {
-      const nameObject = {
-        name: newName,
-        number: newNumber,
-      };
+      return null;
+    }
+  };
+
+  const handleSaveClick = (event) => {
+    event.preventDefault();
+    const nameObject = {
+      name: newName,
+      number: newNumber,
+    };
+    if (persons.some((person) => person.name === newName)) {
+      const personToUpdate = persons.find((person) => person.name === newName);
+      handleUpdate(personToUpdate.id, nameObject);
+    } else {
       phonebook
         .create(nameObject)
         .then((response) => setPersons(persons.concat(response)));
+      setMessage("onnistui");
+      setTimeout(() => {
+        setMessage("");
+      }, 3000);
       setNewName("");
       setNewNumber("");
     }
@@ -82,6 +96,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} errorMessage={errorMessage} />
       <Filter onChange={handleFilterChange} />
       <h2>Add a new</h2>
       <PersonForm

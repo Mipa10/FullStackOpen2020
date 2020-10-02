@@ -1,7 +1,7 @@
 import React from "react";
 
-const Persons = (props) => {
-  const { persons, filter, handleDelete } = props;
+const Persons = ({ persons, filter, handleDelete }) => {
+  
 
   const personsToShow = () => {
     return filter === ""
