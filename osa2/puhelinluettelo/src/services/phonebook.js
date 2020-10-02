@@ -12,8 +12,8 @@ const create = (newObject) => {
     return axios.post(baseUrl,newObject).then(response => response.data)
 }
 
-const del = id => {
-  return axios.delete(`${baseUrl}/${id}`)
+const del = person => {
+  return axios.delete(`${baseUrl}/${person.id}`)
 }
 
 const update = (id, newObject) => {

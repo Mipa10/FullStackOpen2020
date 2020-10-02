@@ -16,7 +16,7 @@ const Persons = ({ persons, filter, handleDelete }) => {
       {personsToShow().map((person) => {
         return (
           <p key={person.name}>
-            {person.name} {person.number}<button onClick = {()=>handleDelete(person.id)}>Delete</button>
+            {person.name} {person.number}<button onClick = {()=>handleDelete(person)}>Delete</button>
           </p>
         );
       })}

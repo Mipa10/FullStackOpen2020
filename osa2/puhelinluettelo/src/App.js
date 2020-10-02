@@ -29,12 +29,13 @@ const App = () => {
     setNewNumber(event.target.value);
   };
 
-  const handleDelete = async (id) => {
-    const personToBeDeleted = persons.find((person) => id === person.id);
-    if (window.confirm(`poistetaanko ${personToBeDeleted.name}`)) {
-      await phonebook.del(id).catch((error) => {
+  const handleDelete = async (personToDelete) => {
+    
+    if (window.confirm(`poistetaanko ${personToDelete.name}`)) {
+      await phonebook.del(personToDelete).then(response=>console.log(response)
+      ).catch((error) => {
         setErrorMessage(
-          `information of ${personToBeDeleted.name} has already been removed from server`
+          `information of ${personToDelete.name} has already been removed from server`
         );
       });
     }
@@ -84,7 +85,7 @@ const App = () => {
       phonebook
         .create(nameObject)
         .then((response) => setPersons(persons.concat(response)));
-      setMessage("onnistui");
+      setMessage(`Added ${nameObject.name}`);
       setTimeout(() => {
         setMessage("");
       }, 3000);
