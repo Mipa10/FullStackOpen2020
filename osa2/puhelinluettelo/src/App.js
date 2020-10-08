@@ -99,7 +99,17 @@ const App = () => {
     } else {
       phonebook
         .create(nameObject)
-        .then((response) => setPersons(persons.concat(response)));
+        .then((response) => setPersons(persons.concat(response)))
+        .catch(error => {
+          
+          setErrorMessage(error.response.data.message)
+          setTimeout(() => {
+            setErrorMessage(null);
+          }, 3000);
+          
+
+       
+      });
       setMessage(`Added ${nameObject.name}`);
       setTimeout(() => {
         setMessage(null);
