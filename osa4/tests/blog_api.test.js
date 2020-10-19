@@ -39,10 +39,15 @@ beforeEach(async () => {
 describe('apitests', () => {
     test('return right amount of blogs (2)', async () => {
         const response = await api.get('/api/blogs')
-        console.log(response.body)
-        
         expect(response.body).toHaveLength(2)
     })
+    test('id is id, not _id', async () => {
+      const response = await api.get('/api/blogs')
+      const blogs = response.body.forEach(element => {
+        expect(element.id).toBeDefined()
+      });
+    })
+
 })
 
 afterAll(()=> {
