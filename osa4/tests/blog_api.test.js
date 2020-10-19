@@ -57,11 +57,21 @@ describe('apitests', () => {
         __v: 0,
       }
       await api.post('/api/blogs', newBlog)
-      
- 
       const response = await api.get('/api/blogs')
       expect(response.body).toHaveLength(3)
+    })
 
+    test('if no likes set it to zero', async () => {
+      const newBlog = {
+        _id: "5a422b3a1b54a676234d17f9",
+        title: "Canonical string reduction",
+        author: "Edsger W. Dijkstra",
+        url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
+        __v: 0,
+      }
+      await api.post('/api/blogs', newBlog)
+      const response = await api.get('/api/blogs')
+      expect(response.body[response.body.length - 1].likes === 0)
     })
 
 })
