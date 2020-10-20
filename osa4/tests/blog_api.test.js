@@ -73,6 +73,23 @@ describe('apitests', () => {
       const response = await api.get('/api/blogs')
       expect(response.body[response.body.length - 1].likes === 0)
     })
+    test('no post if no url or no title', () => {
+      const newBlogNoTitle = {
+        _id: "5a422b3a1b54a676234d17f9",
+        author: "Edsger W. Dijkstra",
+        url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
+        likes: 12,
+        __v: 0,
+      }
+      api.post('/api/blogs', newBlogNoTitle)
+      .expect(400)
+    })
+    test('delete one', () => {
+      api.delete('/api/blogs/5a422aa71b54a676234d17f8')
+      .expect(204)
+      
+      
+    })
 
 })
 
