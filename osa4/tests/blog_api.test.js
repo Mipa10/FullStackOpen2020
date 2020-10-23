@@ -87,10 +87,24 @@ describe('apitests', () => {
     test('delete one', () => {
       api.delete('/api/blogs/5a422aa71b54a676234d17f8')
       .expect(204)
-      
+
       
     })
 
+})
+
+describe('user tests', ()=> {
+  test('reject too short usernames', () => {
+    const newUser = {
+      name: "mikko",
+      username: "mi",
+      password: "salainen"
+    }
+
+    api.post('/api/users', newUser)
+    .expect(400)
+    
+  })
 })
 
 afterAll(()=> {

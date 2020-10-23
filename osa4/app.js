@@ -5,7 +5,9 @@ const mongoose = require("mongoose");
 const config = require("./utils/config");
 const blogsRouter = require("./controllers/blogs");
 const logger = require("./utils/logger");
-
+const usersRouter = require("./controllers/users");
+const middleware = require("./utils/middleware");
+const loginRouter = require("./controllers/login");
 
 const mongoUrl = config.MONGODB_URI;
 logger.info("connecting to", mongoUrl);
@@ -20,33 +22,17 @@ mongoose
     logger.info("connected to MongoDB");
   })
   .catch((error) => {
-      logger.error('error connecting to MongoDB', error.message)
+    logger.error("error connecting to MongoDB", error.message);
   });
-  
+
 app.use(cors());
 app.use(express.json());
+
+app.use(middleware.requestLogger);
 app.use("/api/blogs", blogsRouter);
+app.use("/api/users", usersRouter);
+app.use("/api/login", loginRouter);
 
-// blogsRouter.get("/", (request, response) => {
-//   Blog.find({}).then((blogs) => {
-//     response.json(blogs);
-//   });
-// });
-
-// blogsRouter.post("/", (request, response) => {
-//   if (!request.body.title || !request.body.url) {
-//     response.status(400)
-//   }
-//   const blog = new Blog(request.body);
-   
-
-//   blog.save().then((result) => {
-//     response.status(201).json(result);
-//   });
-// });
-
-// blogsRouter.delete('/:id', (req,res) => {
-
-// })
+app.use(middleware.errorHandler);
 
 module.exports = app;
