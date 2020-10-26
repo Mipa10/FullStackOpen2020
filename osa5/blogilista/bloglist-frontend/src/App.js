@@ -46,6 +46,10 @@ const App = () => {
 
 
     } catch (exception) {
+      setErrorMessage("something went wrong");
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
       
     }
 
