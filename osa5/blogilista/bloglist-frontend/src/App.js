@@ -28,11 +28,13 @@ const App = () => {
 
   const handleBlogAdd = async (blogObject) => {
     try {
-      await blogService.create({
+      const response = await blogService.create({
         title: blogObject.title,
         author: blogObject.author,
         url: blogObject.url,
       });
+
+      setBlogs(blogs.concat(response));
       setSuccessMessage(
         `a new blog ${blogObject.title} by ${blogObject.author} added`
       );
