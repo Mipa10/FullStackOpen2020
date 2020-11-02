@@ -27,19 +27,19 @@ const App = () => {
   }, []);
 
   const addLikeToBlog = (blog) => {
-    console.log('addliketoblog', blog)
+    
     
     const newBlogs = blogs.map(item => {
       
       if(item.id === blog.id) {
 
         item.likes = blog.likes
-        console.log('mapin sisältä', item)
+        
         blogService.update(item)
       }
       return item;
     })
-    console.log('newblogs', newBlogs)
+    
     
     setBlogs(newBlogs)
     
@@ -130,6 +130,20 @@ const App = () => {
     );
   };
 
+  const sortedBlogsByLikes = () => {
+    const sortedBlogs = blogs.sort((a,b) => {
+      return b.likes-a.likes
+    })
+    return(
+
+      sortedBlogs.map((blog) => (
+        <Blog addLike = {addLikeToBlog} key={blog.id} blog={blog} />
+      ))
+    )
+    
+
+  }
+
   const bloglist = () => {
     return (
       <div>
@@ -138,9 +152,8 @@ const App = () => {
         </p>
 
         {blogForm()}
-        {blogs.map((blog) => (
-          <Blog addLike = {addLikeToBlog} key={blog.id} blog={blog} />
-        ))}
+        {sortedBlogsByLikes()}
+        
       </div>
     );
   };

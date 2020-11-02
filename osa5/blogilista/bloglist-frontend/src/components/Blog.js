@@ -29,9 +29,7 @@ const Blog = ({ blog, addLike }) => {
     await setLikes(newAmount)
     const updatedBlog = blog
     updatedBlog.likes = newAmount
-    console.log('updatelikes', updatedBlog.likes)
     
-    console.log('updatedblog', updatedBlog)
     
     addLike(updatedBlog)
 
