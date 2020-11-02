@@ -27,24 +27,17 @@ const App = () => {
   }, []);
 
   const addLikeToBlog = (blog) => {
-    
-    
-    const newBlogs = blogs.map(item => {
-      
-      if(item.id === blog.id) {
+    const newBlogs = blogs.map((item) => {
+      if (item.id === blog.id) {
+        item.likes = blog.likes;
 
-        item.likes = blog.likes
-        
-        blogService.update(item)
+        blogService.update(item);
       }
       return item;
-    })
-    
-    
-    setBlogs(newBlogs)
-    
+    });
 
-  }
+    setBlogs(newBlogs);
+  };
 
   const handleBlogAdd = async (blogObject) => {
     try {
@@ -131,18 +124,13 @@ const App = () => {
   };
 
   const sortedBlogsByLikes = () => {
-    const sortedBlogs = blogs.sort((a,b) => {
-      return b.likes-a.likes
-    })
-    return(
-
-      sortedBlogs.map((blog) => (
-        <Blog addLike = {addLikeToBlog} key={blog.id} blog={blog} />
-      ))
-    )
-    
-
-  }
+    const sortedBlogs = blogs.sort((a, b) => {
+      return b.likes - a.likes;
+    });
+    return sortedBlogs.map((blog) => (
+      <Blog addLike={addLikeToBlog} key={blog.id} blog={blog} />
+    ));
+  };
 
   const bloglist = () => {
     return (
@@ -153,7 +141,6 @@ const App = () => {
 
         {blogForm()}
         {sortedBlogsByLikes()}
-        
       </div>
     );
   };

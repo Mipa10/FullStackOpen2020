@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import blogServices from '../services/blogs'
+import React, {  useState } from "react";
 
 const Blog = ({ blog, addLike }) => {
   const blogStyle = {
@@ -12,10 +11,7 @@ const Blog = ({ blog, addLike }) => {
   const [visible, setVisible] = useState(false);
   const [likes, setLikes] = useState(blog.likes)
 
-  // useEffect(()=> {
-    
-  //   setLikes(0)
-  // },[])
+ 
 
   const hideWhenVisible = { display: visible ? "none" : "inline-block" };
   const showWhenVisible = { display: visible ? "inline-block" : "none" };
