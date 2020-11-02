@@ -19,10 +19,12 @@ blogsRouter.post("/", async (request, response) => {
   }
 
   const user = await User.findById(decodedToken.id);
+  
+  
   const blog = new Blog({
     title: body.title,
     author: body.author,
-    user: user._id,
+    user: user,
     url: body.url,
     likes: body.likes,
   });
@@ -31,6 +33,13 @@ blogsRouter.post("/", async (request, response) => {
   await user.save();
 
   response.json(savedBlog.toJSON());
+});
+
+
+blogsRouter.delete("/", async (request, response) => {
+  
+  await Blog.deleteMany({})
+  
 });
 
 blogsRouter.delete("/:id", async (request, response) => {

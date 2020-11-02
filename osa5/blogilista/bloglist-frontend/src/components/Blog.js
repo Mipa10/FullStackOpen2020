@@ -30,6 +30,10 @@ const Blog = ({ blog }) => {
         {blog.url} <br />
         likes: {blog.likes} 
         <button>like</button><br />
+        {console.log('blogi', blog)}
+        
+        Added by: {blog.user.name}
+        
       </div>
     </div>
   );
