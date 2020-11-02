@@ -34,8 +34,6 @@ blogsRouter.post("/", async (request, response) => {
 
   response.json(savedBlog.toJSON());
 });
-
-
 blogsRouter.delete("/", async (request, response) => {
   
   await Blog.deleteMany({})
@@ -57,10 +55,10 @@ blogsRouter.delete("/:id", async (request, response) => {
 });
 
 blogsRouter.put("/:id", (req, res) => {
-  const blog = {
-    likes: req.body.likes,
-  };
-  Blog.findByIdAndUpdate(req.params.id, blog, { new: true })
+
+  const newBlog = req.body
+  
+  Blog.findByIdAndUpdate(req.params.id, newBlog, { new: true })
     .then((updatedBlog) => {
       res.json(updatedBlog.toJSON());
     })

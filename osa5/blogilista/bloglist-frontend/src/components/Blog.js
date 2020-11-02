@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import blogServices from '../services/blogs'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, addLike }) => {
   const blogStyle = {
     borderStyle: "solid",
     borderRadius: 5,
@@ -8,14 +9,37 @@ const Blog = ({ blog }) => {
     marginTop: 3,
     paddingTop: 5,
   };
-  const [visible, SetVisible] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [likes, setLikes] = useState(blog.likes)
+
+  // useEffect(()=> {
+    
+  //   setLikes(0)
+  // },[])
 
   const hideWhenVisible = { display: visible ? "none" : "inline-block" };
   const showWhenVisible = { display: visible ? "inline-block" : "none" };
 
   const toggleVisibility = () => {
-    SetVisible(!visible);
+    setVisible(!visible);
   };
+
+  const handleLike = async () => {
+    const newAmount = likes + 1;
+    await setLikes(newAmount)
+    const updatedBlog = blog
+    updatedBlog.likes = newAmount
+    console.log('updatelikes', updatedBlog.likes)
+    
+    console.log('updatedblog', updatedBlog)
+    
+    addLike(updatedBlog)
+
+  }
+
+  
+
+
   return (
     <div style={blogStyle}>
       {blog.title} {blog.author}
@@ -28,9 +52,9 @@ const Blog = ({ blog }) => {
       <br />
       <div style={showWhenVisible}>
         {blog.url} <br />
-        likes: {blog.likes} 
-        <button>like</button><br />
-        {console.log('blogi', blog)}
+        likes: {likes} 
+        <button onClick = {handleLike}>like</button><br />
+        
         
         Added by: {blog.user.name}
         

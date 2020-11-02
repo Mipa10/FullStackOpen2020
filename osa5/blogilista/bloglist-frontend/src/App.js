@@ -26,6 +26,26 @@ const App = () => {
     }
   }, []);
 
+  const addLikeToBlog = (blog) => {
+    console.log('addliketoblog', blog)
+    
+    const newBlogs = blogs.map(item => {
+      
+      if(item.id === blog.id) {
+
+        item.likes = blog.likes
+        console.log('mapin sisältä', item)
+        blogService.update(item)
+      }
+      return item;
+    })
+    console.log('newblogs', newBlogs)
+    
+    setBlogs(newBlogs)
+    
+
+  }
+
   const handleBlogAdd = async (blogObject) => {
     try {
       const response = await blogService.create({
@@ -119,7 +139,7 @@ const App = () => {
 
         {blogForm()}
         {blogs.map((blog) => (
-          <Blog key={blog.id} blog={blog} />
+          <Blog addLike = {addLikeToBlog} key={blog.id} blog={blog} />
         ))}
       </div>
     );
