@@ -31,6 +31,12 @@ const Blog = ({ blog, addLike }) => {
 
   }
 
+  const removeBlog = () => {
+    return (
+      <button style={{backgroundColor:'blue', borderRadius:5}}>Remove</button>
+    )
+  }
+
   
 
 
@@ -48,9 +54,8 @@ const Blog = ({ blog, addLike }) => {
         {blog.url} <br />
         likes: {likes} 
         <button onClick = {handleLike}>like</button><br />
-        
-        
         Added by: {blog.user.name}
+        {removeBlog()}
         
       </div>
     </div>
