@@ -23,6 +23,7 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
       setUser(user);
+      blogService.setToken(user.token)
     }
   }, []);
 
@@ -61,6 +62,22 @@ const App = () => {
       }, 5000);
     }
   };
+
+  const handleBlogRemove = async blog => {
+    // console.log('handleblogremove', blog)
+    if(window.confirm(`Remove ${blog.title} by ${blog.author}`)){
+      const newBlogs = blogs.filter(item => {
+        return item.id !== blog.id
+      })
+      setBlogs(newBlogs)
+  
+      await blogService.removeOne(blog)
+
+    }
+    
+    
+
+  }
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -123,12 +140,20 @@ const App = () => {
     );
   };
 
+  const isSameUser = (blog) => {
+    if(blog.user.username === user.username) {
+      return(true)
+    } else {
+      return false
+    }
+  }
+
   const sortedBlogsByLikes = () => {
     const sortedBlogs = blogs.sort((a, b) => {
       return b.likes - a.likes;
     });
     return sortedBlogs.map((blog) => (
-      <Blog addLike={addLikeToBlog} key={blog.id} blog={blog} />
+      <Blog removeBlog = {handleBlogRemove} isSameUser ={isSameUser} addLike={addLikeToBlog} key={blog.id} blog={blog} />
     ));
   };
 
