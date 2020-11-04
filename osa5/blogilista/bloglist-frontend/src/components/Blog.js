@@ -1,50 +1,48 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
 
 const Blog = ({ blog, addLike, isSameUser, removeBlog }) => {
   const blogStyle = {
-    borderStyle: "solid",
+    borderStyle: 'solid',
     borderRadius: 5,
     marginBottom: 3,
     marginTop: 3,
     paddingTop: 5,
-  };
-  const [visible, setVisible] = useState(false);
-  const [likes, setLikes] = useState(blog.likes);
+  }
+  const [visible, setVisible] = useState(false)
+  const [likes, setLikes] = useState(blog.likes)
 
-  const hideWhenVisible = { display: visible ? "none" : "inline-block" };
-  const showWhenVisible = { display: visible ? "inline-block" : "none" };
+  const hideWhenVisible = { display: visible ? 'none' : 'inline-block' }
+  const showWhenVisible = { display: visible ? 'inline-block' : 'none' }
 
   const toggleVisibility = () => {
-    setVisible(!visible);
-  };
+    setVisible(!visible)
+  }
 
   const handleLike = async () => {
-    const newAmount = likes + 1;
-    await setLikes(newAmount);
-    const updatedBlog = blog;
-    updatedBlog.likes = newAmount;
+    const newAmount = likes + 1
+    await setLikes(newAmount)
+    const updatedBlog = blog
+    updatedBlog.likes = newAmount
 
-    addLike(updatedBlog);
-  };
+    addLike(updatedBlog)
+  }
 
   const remove = () => {
     removeBlog(blog)
   }
-
-  
 
   const showRemoveBlog = () => {
     if (isSameUser(blog)) {
       return (
         <button
           onClick={remove}
-          style={{ backgroundColor: "blue", borderRadius: 5 }}
+          style={{ backgroundColor: 'blue', borderRadius: 5 }}
         >
           Remove
         </button>
-      );
+      )
     }
-  };
+  }
 
   return (
     <div style={blogStyle}>
@@ -66,7 +64,7 @@ const Blog = ({ blog, addLike, isSameUser, removeBlog }) => {
         {showRemoveBlog()}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Blog;
+export default Blog
