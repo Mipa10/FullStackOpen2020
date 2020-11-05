@@ -1,6 +1,6 @@
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
-import { fireEvent, getByText, render } from '@testing-library/react'
+import { fireEvent, render } from '@testing-library/react'
 import Blog from './Blog'
 const blog = {
   title: 'tiiitle',
