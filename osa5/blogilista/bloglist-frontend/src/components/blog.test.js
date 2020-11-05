@@ -2,18 +2,17 @@ import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
 import { fireEvent, getByText, render } from '@testing-library/react'
 import Blog from './Blog'
+const blog = {
+  title: 'tiiitle',
+  author: 'aaaauthor',
+  url: 'uuurli',
+  user: {
+    name: 'mikko',
+  },
+  likes: 4,
+}
 
 test('renders only title and author', () => {
-  const blog = {
-    title: 'tiiitle',
-    author: 'aaaauthor',
-    url: 'uuurli',
-    user: {
-      name: 'mikko',
-    },
-    likes: 4,
-  }
-
   const component = render(<Blog blog={blog} isSameUser={() => true} />)
   expect(component.container).toHaveTextContent('tiiitle')
   expect(component.container).toHaveTextContent('aaaauthor')
@@ -22,16 +21,6 @@ test('renders only title and author', () => {
 })
 
 test('renders url and likes when button pressed', () => {
-  const blog = {
-    title: 'tiiitle',
-    author: 'aaaauthor',
-    url: 'uuurli',
-    user: {
-      name: 'mikko',
-    },
-    likes: 4,
-  }
-
   const component = render(<Blog blog={blog} isSameUser={() => true} />)
 
   const button = component.getByText('view')
@@ -39,4 +28,17 @@ test('renders url and likes when button pressed', () => {
 
   const div = component.container.querySelector('.hidedElements')
   expect(div).toBeVisible()
+})
+
+test('if like pressed twice, adds 2 likes', async () => {
+  const mockHandler = jest.fn()
+
+  const component = render(
+    <Blog blog={blog} addLike={mockHandler} isSameUser={() => true} />
+  )
+  const button = component.getByText('like')
+
+  await fireEvent.click(button)
+  await fireEvent.click(button)
+  expect(mockHandler.mock.calls).toHaveLength(2)
 })
