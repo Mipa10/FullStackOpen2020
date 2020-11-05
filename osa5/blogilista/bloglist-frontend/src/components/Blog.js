@@ -54,7 +54,7 @@ const Blog = ({ blog, addLike, isSameUser, removeBlog }) => {
         <button onClick={toggleVisibility}>hide</button>
       </div>
       <br />
-      <div style={showWhenVisible}>
+      <div className="hidedElements" style={showWhenVisible}>
         {blog.url} <br />
         likes: {likes}
         <button onClick={handleLike}>like</button>
