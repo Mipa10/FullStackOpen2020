@@ -64,7 +64,6 @@ const App = () => {
   }
 
   const handleBlogRemove = async (blog) => {
-    // console.log('handleblogremove', blog)
     if (window.confirm(`Remove ${blog.title} by ${blog.author}`)) {
       const newBlogs = blogs.filter((item) => {
         return item.id !== blog.id
