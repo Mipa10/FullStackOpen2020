@@ -6,3 +6,8 @@ Content-Type: application/json
     "username": "mikko",
     "password": "mikko"
 }
+###
+
+GET http://localhost:3001/api/users
+Content-Type: application/json
+

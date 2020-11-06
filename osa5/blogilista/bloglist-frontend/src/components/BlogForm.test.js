@@ -3,15 +3,7 @@ import { render, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 import BlogForm from './BlogForm'
 
-const blog = {
-  title: 'tiiitle',
-  author: 'aaaauthor',
-  url: 'uuurli',
-  user: {
-    name: 'mikko',
-  },
-  likes: 4,
-}
+
 
 test('if right data', () => {
   const mockHandler = jest.fn()
