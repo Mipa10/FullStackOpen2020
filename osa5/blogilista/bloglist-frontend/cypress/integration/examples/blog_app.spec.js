@@ -32,9 +32,13 @@ describe('Blog ', function () {
 
   describe.only('When logged in', function () {
     beforeEach(function () {
-      cy.get('#username').type('mikko')
-      cy.get('#password').type('salainen')
-      cy.get('#loginbutton').click()
+      cy.request('POST', 'http://localhost:3001/api/login', {
+        username: 'mikko',
+        password: 'salainen',
+      }).then((response) => {
+        localStorage.setItem('loggedBlogappUser', JSON.stringify(response.body))
+      })
+      cy.visit('http://localhost:3000')
     })
 
     it('A blog can be created', function () {
@@ -44,7 +48,22 @@ describe('Blog ', function () {
       cy.get('#url').type('uuurl')
       cy.get('#create').click()
       cy.get('#bloglist').contains('tiiitle')
+    })
+    describe.only('and a blog exist', function () {
+      beforeEach(function () {
+        cy.contains('New Blog').click()
+        cy.get('#title').type('tiiitle')
+        cy.get('#author').type('auuuthor')
+        cy.get('#url').type('uuurl')
+        cy.get('#create').click()
+        cy.get('#bloglist').contains('tiiitle')
+      })
+      it('a blog can be liked', function () {
+          cy.contains('view').click()
+          cy.contains('like').click()
+          cy.contains('likes: 1')
 
+      })
     })
   })
 })
