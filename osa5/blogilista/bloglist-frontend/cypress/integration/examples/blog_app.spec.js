@@ -29,4 +29,22 @@ describe('Blog ', function () {
       cy.get('.error').should('have.css', 'color', 'rgb(255, 0, 0)')
     })
   })
+
+  describe.only('When logged in', function () {
+    beforeEach(function () {
+      cy.get('#username').type('mikko')
+      cy.get('#password').type('salainen')
+      cy.get('#loginbutton').click()
+    })
+
+    it('A blog can be created', function () {
+      cy.contains('New Blog').click()
+      cy.get('#title').type('tiiitle')
+      cy.get('#author').type('auuuthor')
+      cy.get('#url').type('uuurl')
+      cy.get('#create').click()
+      cy.get('#bloglist').contains('tiiitle')
+
+    })
+  })
 })
