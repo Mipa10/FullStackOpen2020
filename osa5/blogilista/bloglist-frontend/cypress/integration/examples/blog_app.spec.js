@@ -49,7 +49,7 @@ describe('Blog ', function () {
       cy.get('#create').click()
       cy.get('#bloglist').contains('tiiitle')
     })
-    describe.only('and a blog exist', function () {
+    describe('and a blog exist', function () {
       beforeEach(function () {
         cy.contains('New Blog').click()
         cy.get('#title').type('tiiitle')
@@ -59,9 +59,27 @@ describe('Blog ', function () {
         cy.get('#bloglist').contains('tiiitle')
       })
       it('a blog can be liked', function () {
-          cy.contains('view').click()
-          cy.contains('like').click()
-          cy.contains('likes: 1')
+        cy.contains('view').click()
+        cy.contains('like').click()
+        cy.contains('likes: 1')
+      })
+      it('a blog can be removed', function () {
+        cy.contains('view').click()
+        cy.contains('Remove').click()
+        cy.get('#bloglist').should('not.contain', 'tiiitle')
+      })
+      it.only('a blog can only be removed by user who added it', function () {
+        cy.request('POST', 'http://localhost:3001/api/users', {
+          name: 'matti',
+          username: 'matti',
+          password: 'salainen',
+        })
+        cy.contains('Logout').click()
+        cy.get('#username').type('matti')
+        cy.get('#password').type('salainen')
+        cy.get('#loginbutton').click()
+        cy.contains('view').click()
+        cy.get('#bloglist').should('not.contain', 'Remove')
 
       })
     })
