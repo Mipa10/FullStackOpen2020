@@ -30,7 +30,7 @@ describe('Blog ', function () {
     })
   })
 
-  describe.only('When logged in', function () {
+  describe('When logged in', function () {
     beforeEach(function () {
       cy.request('POST', 'http://localhost:3001/api/login', {
         username: 'mikko',
@@ -51,12 +51,31 @@ describe('Blog ', function () {
     })
     describe('and a blog exist', function () {
       beforeEach(function () {
-        cy.contains('New Blog').click()
-        cy.get('#title').type('tiiitle')
-        cy.get('#author').type('auuuthor')
-        cy.get('#url').type('uuurl')
-        cy.get('#create').click()
-        cy.get('#bloglist').contains('tiiitle')
+        const user = JSON.parse(localStorage.getItem('loggedBlogappUser'))
+
+        cy.request({
+          method: 'POST',
+          url: 'http://localhost:3001/api/blogs',
+          body: {
+            title: 'tiiitle',
+            author: 'auuuthor',
+            url: 'uuurl',
+            likes: 0,
+          },
+          headers: {
+            Authorization: `bearer ${user.token}`,
+          },
+        })
+
+        // cy.request('POST', 'http://localhost:3001/api/blogs', {
+        //   title: 'tiiitle',
+        //   author: 'auuuthor',
+        //   url: 'uuurl',
+        //   likes: 0,
+        //   user: user,
+        // })
+
+        cy.visit('http://localhost:3000')
       })
       it('a blog can be liked', function () {
         cy.contains('view').click()
@@ -68,7 +87,7 @@ describe('Blog ', function () {
         cy.contains('Remove').click()
         cy.get('#bloglist').should('not.contain', 'tiiitle')
       })
-      it.only('a blog can only be removed by user who added it', function () {
+      it('a blog can only be removed by user who added it', function () {
         cy.request('POST', 'http://localhost:3001/api/users', {
           name: 'matti',
           username: 'matti',
@@ -80,8 +99,63 @@ describe('Blog ', function () {
         cy.get('#loginbutton').click()
         cy.contains('view').click()
         cy.get('#bloglist').should('not.contain', 'Remove')
+      })
+    })
+    describe.only('and many blogs exist', function () {
+      beforeEach(function () {
+        const user = JSON.parse(localStorage.getItem('loggedBlogappUser'))
+
+        cy.request({
+          method: 'POST',
+          url: 'http://localhost:3001/api/blogs',
+          body: {
+            title: 'tiiitle',
+            author: 'auuuthor',
+            url: 'uuurl',
+            likes: 0,
+          },
+          headers: {
+            Authorization: `bearer ${user.token}`,
+          },
+        })
+        cy.request({
+          method: 'POST',
+          url: 'http://localhost:3001/api/blogs',
+          body: {
+            title: 'tiiitle5',
+            author: 'auuuthor5',
+            url: 'uuurl5',
+            likes: 5,
+          },
+          headers: {
+            Authorization: `bearer ${user.token}`,
+          },
+        })
+        cy.request({
+          method: 'POST',
+          url: 'http://localhost:3001/api/blogs',
+          body: {
+            title: 'tiiitle3',
+            author: 'auuuthor3',
+            url: 'uuurl3',
+            likes: 3,
+          },
+          headers: {
+            Authorization: `bearer ${user.token}`,
+          },
+        })
+        cy.visit('http://localhost:3000')
 
       })
+    //   it('shows blogs in right order', function() {
+    //       const newArray = []
+          
+    //       cy.get('.hidedElements').then(response => {
+    //       console.log('response', response.body)
+
+    //           newArray.push(response.body[1].likes)
+    //       })
+    //   })
     })
   })
 })
