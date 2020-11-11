@@ -151,15 +151,19 @@ const App = () => {
     const sortedBlogs = blogs.sort((a, b) => {
       return b.likes - a.likes
     })
-    return sortedBlogs.map((blog) => (
-      <Blog
-        removeBlog={handleBlogRemove}
-        isSameUser={isSameUser}
-        addLike={addLikeToBlog}
-        key={blog.id}
-        blog={blog}
-      />
-    ))
+    return (
+      <div id="blogit">
+        {sortedBlogs.map((blog) => (
+          <Blog
+            removeBlog={handleBlogRemove}
+            isSameUser={isSameUser}
+            addLike={addLikeToBlog}
+            key={blog.id}
+            blog={blog}
+          />
+        ))}
+      </div>
+    )
   }
 
   const bloglist = () => {

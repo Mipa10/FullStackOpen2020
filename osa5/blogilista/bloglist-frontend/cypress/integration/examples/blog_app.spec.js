@@ -145,17 +145,17 @@ describe('Blog ', function () {
           },
         })
         cy.visit('http://localhost:3000')
-
       })
-    //   it('shows blogs in right order', function() {
-    //       const newArray = []
-          
-    //       cy.get('.hidedElements').then(response => {
-    //       console.log('response', response.body)
+      it('shows blogs in right order', function () {
+        const newArray = []
 
-    //           newArray.push(response.body[1].likes)
-    //       })
-    //   })
+        cy.get('#blogit')
+          .find('.hidedElements')
+          .contains('likes')
+          .then((response) => {
+            console.log('response', response)
+          })
+      })
     })
   })
 })
