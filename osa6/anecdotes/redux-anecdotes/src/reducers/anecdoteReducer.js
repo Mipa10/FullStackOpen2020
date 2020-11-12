@@ -34,11 +34,24 @@ const reducer = (state = initialState, action) => {
       return newState;
 
     case "ADD":
-      const newAnecdote = asObject(action.content);
+      const newAnecdote = action.content;
       return state.concat(newAnecdote);
     default:
       return state;
   }
 };
+
+export const add = (anecdote) => {
+  return {
+    type: "ADD",
+    content: asObject(anecdote),
+  };
+};
+export const voteNote = (id) =>{
+  return {
+    type: "VOTE",
+    id
+  }
+}
 
 export default reducer;
