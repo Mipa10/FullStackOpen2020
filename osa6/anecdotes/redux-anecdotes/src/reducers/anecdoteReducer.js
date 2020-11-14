@@ -34,11 +34,15 @@ export const add = (anecdote) => {
   }
 };
 
-export const voteNote = (id) => {
-  return {
-    type: "VOTE",
-    id,
-  };
+export const voteNote = (anecdote) => {
+  return async dispatch => {
+    const updated = await anecdoteService.updateVote(anecdote)
+    dispatch({
+      type: "VOTE",
+      id: updated.id
+    })
+  }
+ 
 };
 
 export const initAnecdotes = () => {
