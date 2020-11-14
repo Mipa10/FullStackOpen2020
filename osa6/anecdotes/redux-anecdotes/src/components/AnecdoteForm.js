@@ -1,7 +1,7 @@
 import React from "react";
 import { add } from "../reducers/anecdoteReducer";
 import { useDispatch } from "react-redux";
-import anecdoteService from '../services/anecdotes'
+
 
 const AnecdoteForm = () => {
   const dispatch = useDispatch();
@@ -10,12 +10,8 @@ const AnecdoteForm = () => {
     const anecdote = event.target.anecdote.value
     event.preventDefault();
     event.target.anecdote.value = "";
-    const newAnecdote = await anecdoteService.createNew(anecdote)
-    console.log('newanec', newAnecdote)
-    
-    dispatch(add(newAnecdote));
-
-
+    // const newAnecdote = await anecdoteService.createNew(anecdote)
+    dispatch(add(anecdote));
   };
 
   return (
