@@ -11,16 +11,23 @@ const notificationReducer = (state = initialState, action) => {
   }
 };
 
-export const addNotification = (notification) => {
-  return {
-    type: "ADD_NOTIFICATION",
-    notification,
+export const addNotification = (notification, delay) => {
+  return async (dispatch) => {
+    await dispatch({
+      type: "ADD_NOTIFICATION",
+      notification,
+    });
+    setTimeout(() => {
+      dispatch({
+        type: "REMOVE",
+      });
+    }, delay * 1000);
   };
 };
 
 export const removeNotification = () => {
   return {
-    type: "REMOVE"
+    type: "REMOVE",
   };
 };
 
