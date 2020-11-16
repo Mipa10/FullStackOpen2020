@@ -1,22 +1,14 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { connect} from "react-redux";
 import { voteNote } from "../reducers/anecdoteReducer";
 import { addNotification } from "../reducers/notificationReducer";
 
-const AnecdoteList = () => {
-  let anecdotes = useSelector((state) => state.anecdotes);
-
-  const filteri = useSelector((state) => state.filter);
-
-  anecdotes = anecdotes.filter((anecdote) =>
-    anecdote.content.includes(filteri)
-  );
-
-  const dispatch = useDispatch();
+const AnecdoteList = ({ anecdotes, voteNote, addNotification }) => {
+  
 
   const vote = (anecdote) => {
-    dispatch(voteNote(anecdote));
-    dispatch(addNotification(`You voted '${anecdote.content}'`, 5));
+    voteNote(anecdote);
+    addNotification(`You voted '${anecdote.content}'`, 5);
   };
 
   return (
@@ -34,4 +26,19 @@ const AnecdoteList = () => {
   );
 };
 
-export default AnecdoteList;
+const mapStateToProps = (state) => {
+  const filteredAnecdotes = state.anecdotes.filter((anecdote) =>
+    anecdote.content.includes(state.filter)
+  );
+
+  return {
+    anecdotes: filteredAnecdotes,
+    filter: state.filter,
+  };
+};
+
+const mapDispatchToProps = {voteNote, addNotification}
+
+const ConnectedAnecdoteList = connect(mapStateToProps, mapDispatchToProps)(AnecdoteList);
+
+export default ConnectedAnecdoteList;
