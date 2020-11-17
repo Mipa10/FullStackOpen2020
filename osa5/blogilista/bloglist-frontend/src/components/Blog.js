@@ -56,7 +56,7 @@ const Blog = ({ blog, addLike, isSameUser, removeBlog }) => {
       <br />
       <div className="hidedElements" style={showWhenVisible}>
         {blog.url} <br />
-        likes: {likes}
+        likes: <span className="likes">{likes}</span>
         <button onClick={handleLike}>like</button>
         <br />
         Added by: {blog.user.name}

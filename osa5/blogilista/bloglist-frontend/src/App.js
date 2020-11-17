@@ -155,6 +155,7 @@ const App = () => {
       <div id="blogit">
         {sortedBlogs.map((blog) => (
           <Blog
+           
             removeBlog={handleBlogRemove}
             isSameUser={isSameUser}
             addLike={addLikeToBlog}

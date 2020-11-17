@@ -1,3 +1,5 @@
+const { isExportDeclaration } = require('typescript')
+
 describe('Blog ', function () {
   beforeEach(function () {
     cy.request('POST', 'http://localhost:3001/api/testing/reset')
@@ -149,11 +151,18 @@ describe('Blog ', function () {
       it('shows blogs in right order', function () {
         const newArray = []
 
-        cy.get('#blogit')
-          .find('.hidedElements')
-          .contains('likes')
+        cy.get('.likes')
           .then((response) => {
-            console.log('response', response)
+            for (let i = 0; i < response.length; i++) {
+              newArray.push(response[i].innerHTML)
+
+              console.log('newArray', newArray)
+            }
+
+            return newArray
+          })
+          .then((response) => {
+            expect(response).to.deep.equal([ '5', '3', '0'])
           })
       })
     })
