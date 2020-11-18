@@ -5,9 +5,9 @@ import {
   Switch,
   Route,
   useParams,
-  useHistory,
-  Redirect
 } from "react-router-dom";
+
+import CreateNew from "./components/CreateNew";
 
 const Menu = () => {
   const padding = {
@@ -89,57 +89,6 @@ const Footer = () => (
   </div>
 );
 
-const CreateNew = (props) => {
-  const [content, setContent] = useState("");
-  const [author, setAuthor] = useState("");
-  const [info, setInfo] = useState("");
-  const history = useHistory()
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    props.addNew({
-      content,
-      author,
-      info,
-      votes: 0,
-    });
-    history.push('/')
-  };
-
-  return (
-    <div>
-      <h2>create a new anecdote</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          content
-          <input
-            name="content"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-          />
-        </div>
-        <div>
-          author
-          <input
-            name="author"
-            value={author}
-            onChange={(e) => setAuthor(e.target.value)}
-          />
-        </div>
-        <div>
-          url for more info
-          <input
-            name="info"
-            value={info}
-            onChange={(e) => setInfo(e.target.value)}
-          />
-        </div>
-        <button type="submit" >create</button>
-      </form>
-    </div>
-  );
-};
-
 const App = () => {
   const [anecdotes, setAnecdotes] = useState([
     {
@@ -165,18 +114,14 @@ const App = () => {
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0);
     setAnecdotes(anecdotes.concat(anecdote));
-    setNotification(`a new anecdote ${anecdote.content} created!`)
-    clearTimeout(timeOutID)
-    timeOutID = setTimeout(()=> setNotification(''), 10000)
-    
+    setNotification(`a new anecdote ${anecdote.content} created!`);
+    clearTimeout(timeOutID);
+    timeOutID = setTimeout(() => setNotification(""), 10000);
   };
 
-  const Notification = notification => {
-    console.log('notifi', notification)
-    return (
-      <p>{notification.notification}</p>
-    )
-  }
+  const Notification = (notification) => {
+    return <p>{notification.notification}</p>;
+  };
 
   const anecdoteById = (id) => anecdotes.find((a) => a.id === id);
 
@@ -195,7 +140,7 @@ const App = () => {
     <Router>
       <h1>Software anecdotes</h1>
       <Menu />
-      {notification ? <Notification notification={notification}/> : null}
+      {notification ? <Notification notification={notification} /> : null}
       <Switch>
         <Route path="/anecdotes/:id">
           <Anecdote anecdotes={anecdotes} />
