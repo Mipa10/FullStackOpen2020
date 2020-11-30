@@ -10,11 +10,11 @@ import {
   addNotification,
   removeNotification,
 } from './reducers/notificationReducer'
-import { initializeBlogs, addNewBlog, addLike } from './reducers/blogReducer'
+import { initializeBlogs, addNewBlog } from './reducers/blogReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
 const App = () => {
-  //const [blogs, setBlogs] = useState([])
+ 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -55,17 +55,6 @@ const App = () => {
       notifyWith(`a new blog ${blogObject.title} by ${blogObject.author} added`)
     } catch (exception) {
       notifyWith('something went wrong', 'error')
-    }
-  }
-
-  const handleBlogRemove = async (blog) => {
-    if (window.confirm(`Remove ${blog.title} by ${blog.author}`)) {
-      const newBlogs = blogs.filter((item) => {
-        return item.id !== blog.id
-      })
-      // setBlogs(newBlogs)
-
-      await blogService.removeOne(blog)
     }
   }
 
@@ -147,7 +136,6 @@ const App = () => {
       <div id="blogit">
         {sortedBlogs.map((blog) => (
           <Blog
-            removeBlog={handleBlogRemove}
             isSameUser={isSameUser}
             key={blog.id}
             blog={blog}

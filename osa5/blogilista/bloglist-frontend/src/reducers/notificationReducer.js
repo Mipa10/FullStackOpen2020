@@ -4,7 +4,7 @@ const notificationReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'ADD_NOTIFICATION':
       return action.notification
-    case 'REMOVE':
+    case 'REMOVE_NOTIFICATION':
       return initialState
     default:
       return state
@@ -20,7 +20,7 @@ export const addNotification = (notification) => {
 
 export const removeNotification = () => {
   return {
-    type: 'REMOVE',
+    type: 'REMOVE_NOTIFICATION',
   }
 }
 

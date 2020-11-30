@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { addLike } from '../reducers/blogReducer'
+import { addLike, removeBlog } from '../reducers/blogReducer'
 import blogService from '../services/blogs'
 
-const Blog = ({ blog, isSameUser, removeBlog }) => {
+const Blog = ({ blog, isSameUser }) => {
   const dispatch = useDispatch()
   const blogStyle = {
     borderStyle: 'solid',
@@ -28,8 +28,11 @@ const Blog = ({ blog, isSameUser, removeBlog }) => {
     dispatch(addLike(response))
   }
 
-  const remove = () => {
-    removeBlog(blog)
+  const remove = async () => {
+    if (window.confirm(`Remove ${blog.title} by ${blog.author}`)) {
+      await blogService.removeOne(blog)
+      dispatch(removeBlog(blog))
+    }
   }
 
   const showRemoveBlog = () => {
