@@ -42,7 +42,7 @@ const App = () => {
     setBlogs(newBlogs)
   }
 
-  const notifyWith = (message, type='success') => {
+  const notifyWith = (message, type = 'success') => {
     setNotification({
       message,
       type,
@@ -61,18 +61,9 @@ const App = () => {
       })
 
       setBlogs(blogs.concat(response))
-      // setSuccessMessage(
-      //   `a new blog ${blogObject.title} by ${blogObject.author} added`
-      // )
-      // setTimeout(() => {
-      //   setSuccessMessage(null)
-      // }, 5000)
+
       notifyWith(`a new blog ${blogObject.title} by ${blogObject.author} added`)
     } catch (exception) {
-      // setErrorMessage('something went wrong')
-      // setTimeout(() => {
-      //   setErrorMessage(null)
-      // }, 5000)
       notifyWith('something went wrong', 'error')
     }
   }
