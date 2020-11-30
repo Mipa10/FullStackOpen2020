@@ -6,15 +6,17 @@ import './App.css'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 import Notification from './components/Notification'
+import { addNotification } from './reducers/notificationReducer'
+import { useDispatch, useSelector } from 'react-redux'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [errorMessage, setErrorMessage] = useState(null)
-  const [successMessage, setSuccessMessage] = useState(null)
-  const [notification, setNotification] = useState(null)
+  // const [notification, setNotification] = useState(null)
+  const dispatch = useDispatch()
+  const notification = useSelector((state) => state)
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs))
@@ -43,13 +45,14 @@ const App = () => {
   }
 
   const notifyWith = (message, type = 'success') => {
-    setNotification({
-      message,
-      type,
-    })
-    setTimeout(() => {
-      setNotification(null)
-    }, 5000)
+    dispatch(addNotification({ message, type }))
+    // setNotification({
+    //   message,
+    //   type,
+    // })
+    // setTimeout(() => {
+    //   setNotification(null)
+    // }, 5000)
   }
 
   const handleBlogAdd = async (blogObject) => {
@@ -94,10 +97,7 @@ const App = () => {
 
       blogService.setToken(user.token)
     } catch (exception) {
-      setErrorMessage('wrong credentials')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+      notifyWith('wrong credentials', 'error')
     }
     console.log('logging in with', username, password)
   }
@@ -183,23 +183,11 @@ const App = () => {
       </div>
     )
   }
-  // const Notification = ({ message }) => {
-  //   if (message === null) {
-  //     return null
-  //   } else if (message === errorMessage) {
-  //     return <div className="error">{message}</div>
-  //   } else if (message === successMessage) {
-  //     return <div className="success">{message}</div>
-  //   }
-  // }
 
   return (
     <div>
       <h2>blogs</h2>
-
       <Notification notification={notification} />
-      {/* <Notification message={successMessage} /> */}
-
       {user === null ? loginForm() : bloglist()}
     </div>
   )
