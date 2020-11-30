@@ -5,6 +5,7 @@ import loginService from './services/login'
 import './App.css'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
+import Notification from './components/Notification'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -13,6 +14,7 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
+  const [notification, setNotification] = useState(null)
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs))
@@ -40,6 +42,16 @@ const App = () => {
     setBlogs(newBlogs)
   }
 
+  const notifyWith = (message, type='success') => {
+    setNotification({
+      message,
+      type,
+    })
+    setTimeout(() => {
+      setNotification(null)
+    }, 5000)
+  }
+
   const handleBlogAdd = async (blogObject) => {
     try {
       const response = await blogService.create({
@@ -49,17 +61,19 @@ const App = () => {
       })
 
       setBlogs(blogs.concat(response))
-      setSuccessMessage(
-        `a new blog ${blogObject.title} by ${blogObject.author} added`
-      )
-      setTimeout(() => {
-        setSuccessMessage(null)
-      }, 5000)
+      // setSuccessMessage(
+      //   `a new blog ${blogObject.title} by ${blogObject.author} added`
+      // )
+      // setTimeout(() => {
+      //   setSuccessMessage(null)
+      // }, 5000)
+      notifyWith(`a new blog ${blogObject.title} by ${blogObject.author} added`)
     } catch (exception) {
-      setErrorMessage('something went wrong')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+      // setErrorMessage('something went wrong')
+      // setTimeout(() => {
+      //   setErrorMessage(null)
+      // }, 5000)
+      notifyWith('something went wrong', 'error')
     }
   }
 
@@ -155,7 +169,6 @@ const App = () => {
       <div id="blogit">
         {sortedBlogs.map((blog) => (
           <Blog
-           
             removeBlog={handleBlogRemove}
             isSameUser={isSameUser}
             addLike={addLikeToBlog}
@@ -179,24 +192,24 @@ const App = () => {
       </div>
     )
   }
-  const Notification = ({ message }) => {
-    if (message === null) {
-      return null
-    } else if (message === errorMessage) {
-      return <div className="error">{message}</div>
-    } else if (message === successMessage) {
-      return <div className="success">{message}</div>
-    }
-  }
+  // const Notification = ({ message }) => {
+  //   if (message === null) {
+  //     return null
+  //   } else if (message === errorMessage) {
+  //     return <div className="error">{message}</div>
+  //   } else if (message === successMessage) {
+  //     return <div className="success">{message}</div>
+  //   }
+  // }
 
   return (
     <div>
       <h2>blogs</h2>
 
-      <Notification message={errorMessage} />
-      <Notification message={successMessage} />
+      <Notification notification={notification} />
+      {/* <Notification message={successMessage} /> */}
 
-      {user == null ? loginForm() : bloglist()}
+      {user === null ? loginForm() : bloglist()}
     </div>
   )
 }
