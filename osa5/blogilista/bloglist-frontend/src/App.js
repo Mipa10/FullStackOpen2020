@@ -6,7 +6,10 @@ import './App.css'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 import Notification from './components/Notification'
-import { addNotification } from './reducers/notificationReducer'
+import {
+  addNotification,
+  removeNotification,
+} from './reducers/notificationReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
 const App = () => {
@@ -14,7 +17,6 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  // const [notification, setNotification] = useState(null)
   const dispatch = useDispatch()
   const notification = useSelector((state) => state)
 
@@ -46,13 +48,9 @@ const App = () => {
 
   const notifyWith = (message, type = 'success') => {
     dispatch(addNotification({ message, type }))
-    // setNotification({
-    //   message,
-    //   type,
-    // })
-    // setTimeout(() => {
-    //   setNotification(null)
-    // }, 5000)
+    setTimeout(() => {
+      dispatch(removeNotification())
+    }, 5000)
   }
 
   const handleBlogAdd = async (blogObject) => {

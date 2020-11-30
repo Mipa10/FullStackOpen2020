@@ -4,8 +4,9 @@ import App from './App'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 import notificationReducer from './reducers/notificationReducer'
+import { composeWithDevTools} from 'redux-devtools-extension'
 
-const store = createStore(notificationReducer)
+const store = createStore(notificationReducer, composeWithDevTools())
 
 ReactDOM.render(
   <Provider store={store}>

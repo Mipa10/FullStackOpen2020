@@ -1,3 +1,5 @@
+import { useDispatch } from 'react-redux'
+
 const initialState = null
 
 const notificationReducer = (state = initialState, action) => {
