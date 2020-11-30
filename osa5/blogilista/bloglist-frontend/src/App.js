@@ -10,19 +10,21 @@ import {
   addNotification,
   removeNotification,
 } from './reducers/notificationReducer'
+import { initializeBlogs, addNewBlog, addLike } from './reducers/blogReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+  //const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const dispatch = useDispatch()
-  const notification = useSelector((state) => state)
+  const notification = useSelector((state) => state.notification)
+  const blogs = useSelector((state) => state.blogs)
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs))
-  }, [])
+    blogService.getAll().then((blogs) => dispatch(initializeBlogs(blogs)))
+  }, [dispatch])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -32,19 +34,6 @@ const App = () => {
       blogService.setToken(user.token)
     }
   }, [])
-
-  const addLikeToBlog = (blog) => {
-    const newBlogs = blogs.map((item) => {
-      if (item.id === blog.id) {
-        item.likes = blog.likes
-
-        blogService.update(item)
-      }
-      return item
-    })
-
-    setBlogs(newBlogs)
-  }
 
   const notifyWith = (message, type = 'success') => {
     dispatch(addNotification({ message, type }))
@@ -61,7 +50,7 @@ const App = () => {
         url: blogObject.url,
       })
 
-      setBlogs(blogs.concat(response))
+      dispatch(addNewBlog(response))
 
       notifyWith(`a new blog ${blogObject.title} by ${blogObject.author} added`)
     } catch (exception) {
@@ -74,7 +63,7 @@ const App = () => {
       const newBlogs = blogs.filter((item) => {
         return item.id !== blog.id
       })
-      setBlogs(newBlogs)
+      // setBlogs(newBlogs)
 
       await blogService.removeOne(blog)
     }
@@ -160,7 +149,6 @@ const App = () => {
           <Blog
             removeBlog={handleBlogRemove}
             isSameUser={isSameUser}
-            addLike={addLikeToBlog}
             key={blog.id}
             blog={blog}
           />

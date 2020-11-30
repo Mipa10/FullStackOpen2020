@@ -1,6 +1,10 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { addLike } from '../reducers/blogReducer'
+import blogService from '../services/blogs'
 
-const Blog = ({ blog, addLike, isSameUser, removeBlog }) => {
+const Blog = ({ blog, isSameUser, removeBlog }) => {
+  const dispatch = useDispatch()
   const blogStyle = {
     borderStyle: 'solid',
     borderRadius: 5,
@@ -9,7 +13,6 @@ const Blog = ({ blog, addLike, isSameUser, removeBlog }) => {
     paddingTop: 5,
   }
   const [visible, setVisible] = useState(false)
-  const [likes, setLikes] = useState(blog.likes)
 
   const hideWhenVisible = { display: visible ? 'none' : 'inline-block' }
   const showWhenVisible = { display: visible ? 'inline-block' : 'none' }
@@ -18,13 +21,11 @@ const Blog = ({ blog, addLike, isSameUser, removeBlog }) => {
     setVisible(!visible)
   }
 
-  const handleLike = async () => {
-    const newAmount = likes + 1
-    await setLikes(newAmount)
-    const updatedBlog = blog
-    updatedBlog.likes = newAmount
-
-    addLike(updatedBlog)
+  const handleLikeClick = async () => {
+    const newLikes = blog.likes + 1
+    const updatedBlog = { ...blog, likes: newLikes }
+    const response = await blogService.update(updatedBlog)
+    dispatch(addLike(response))
   }
 
   const remove = () => {
@@ -56,8 +57,8 @@ const Blog = ({ blog, addLike, isSameUser, removeBlog }) => {
       <br />
       <div className="hidedElements" style={showWhenVisible}>
         {blog.url} <br />
-        likes: <span className="likes">{likes}</span>
-        <button onClick={handleLike}>like</button>
+        likes: <span className="likes">{blog.likes}</span>
+        <button onClick={handleLikeClick}>like</button>
         <br />
         Added by: {blog.user.name}
         <br />
