@@ -11,17 +11,18 @@ import {
   removeNotification,
 } from './reducers/notificationReducer'
 import { initializeBlogs, addNewBlog } from './reducers/blogReducer'
-import {addUser} from './reducers/userReducer'
+import { addUser } from './reducers/userReducer'
 import { useDispatch, useSelector } from 'react-redux'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import Users from './components/Users'
 
 const App = () => {
- 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const dispatch = useDispatch()
   const notification = useSelector((state) => state.notification)
   const blogs = useSelector((state) => state.blogs)
-  const user = useSelector(state => state.user)
+  const user = useSelector((state) => state.user)
 
   useEffect(() => {
     blogService.getAll().then((blogs) => dispatch(initializeBlogs(blogs)))
@@ -34,7 +35,7 @@ const App = () => {
       dispatch(addUser(user))
       blogService.setToken(user.token)
     }
-  }, [])
+  }, [dispatch])
 
   const notifyWith = (message, type = 'success') => {
     dispatch(addNotification({ message, type }))
@@ -82,7 +83,6 @@ const App = () => {
   const handleLogout = (event) => {
     window.localStorage.removeItem('loggedBlogappUser')
     dispatch(addUser(null))
-
   }
 
   const loginForm = () => {
@@ -138,34 +138,37 @@ const App = () => {
     return (
       <div id="blogit">
         {sortedBlogs.map((blog) => (
-          <Blog
-            isSameUser={isSameUser}
-            key={blog.id}
-            blog={blog}
-          />
+          <Blog isSameUser={isSameUser} key={blog.id} blog={blog} />
         ))}
       </div>
     )
   }
 
-  const bloglist = () => {
+  const loggedUser = () => {
     return (
-      <div id="bloglist">
-        <p>
-          {user.name} logged in<button onClick={handleLogout}>Logout</button>
-        </p>
-
-        {blogForm()}
-        {sortedBlogsByLikes()}
-      </div>
+      <p>
+        {user.name} logged in<button onClick={handleLogout}>Logout</button>
+      </p>
     )
   }
+
 
   return (
     <div>
       <h2>blogs</h2>
       <Notification notification={notification} />
-      {user === null ? loginForm() : bloglist()}
+      {user === null ? loginForm() : loggedUser()}
+      <Router>
+        <Switch>
+          <Route path="/users">
+            <Users />
+          </Route>
+          <Route path="/">
+            {blogForm()}
+            {sortedBlogsByLikes()}
+          </Route>
+        </Switch>
+      </Router>
     </div>
   )
 }
