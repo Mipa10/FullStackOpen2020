@@ -2,7 +2,7 @@ const initialState = null
 
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'ADD_USER':
+    case 'ADD_CURRENT_USER':
       return action.data
     default:
       return state
@@ -11,7 +11,7 @@ const userReducer = (state = initialState, action) => {
 
 export const addUser = (user) => {
     return {
-        type:'ADD_USER',
+        type:'ADD_CURRENT_USER',
         data: user
     }
 }

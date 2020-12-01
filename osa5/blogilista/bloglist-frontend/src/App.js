@@ -13,8 +13,11 @@ import {
 import { initializeBlogs, addNewBlog } from './reducers/blogReducer'
 import { addUser } from './reducers/userReducer'
 import { useDispatch, useSelector } from 'react-redux'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import { Switch, Route, useRouteMatch } from 'react-router-dom'
 import Users from './components/Users'
+import User from './components/User'
+import userService from './services/users'
+import { initUsers } from './reducers/usersReducer'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -23,6 +26,7 @@ const App = () => {
   const notification = useSelector((state) => state.notification)
   const blogs = useSelector((state) => state.blogs)
   const user = useSelector((state) => state.user)
+  const users = useSelector((state) => state.users)
 
   useEffect(() => {
     blogService.getAll().then((blogs) => dispatch(initializeBlogs(blogs)))
@@ -35,6 +39,10 @@ const App = () => {
       dispatch(addUser(user))
       blogService.setToken(user.token)
     }
+  }, [dispatch])
+
+  useEffect(() => {
+    userService.getUsers().then((response) => dispatch(initUsers(response)))
   }, [dispatch])
 
   const notifyWith = (message, type = 'success') => {
@@ -152,23 +160,29 @@ const App = () => {
     )
   }
 
+  const match = useRouteMatch('/users/:id')
+
+  const userPage = match
+    ? users.find((useri) => useri.id === match.params.id)
+    : null
 
   return (
     <div>
       <h2>blogs</h2>
       <Notification notification={notification} />
       {user === null ? loginForm() : loggedUser()}
-      <Router>
-        <Switch>
-          <Route path="/users">
-            <Users />
-          </Route>
-          <Route path="/">
-            {blogForm()}
-            {sortedBlogsByLikes()}
-          </Route>
-        </Switch>
-      </Router>
+      <Switch>
+        <Route path="/users/:id">
+          <User user={userPage} />
+        </Route>
+        <Route path="/users">
+          <Users users={users} />
+        </Route>
+        <Route path="/">
+          {blogForm()}
+          {sortedBlogsByLikes()}
+        </Route>
+      </Switch>
     </div>
   )
 }
