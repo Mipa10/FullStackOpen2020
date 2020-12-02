@@ -132,7 +132,6 @@ const App = () => {
     )
   }
 
-
   const sortedBlogsByLikes = () => {
     const sortedBlogs = blogs.sort((a, b) => {
       return b.likes - a.likes
@@ -140,7 +139,7 @@ const App = () => {
     return (
       <div id="blogit">
         {sortedBlogs.map((blog) => (
-          <Link key={blog.id+1} to={`/blogs/${blog.id}`}>
+          <Link key={blog.id + 1} to={`/blogs/${blog.id}`}>
             <Blog key={blog.id} blog={blog} />
           </Link>
         ))}
@@ -150,9 +149,9 @@ const App = () => {
 
   const loggedUser = () => {
     return (
-      <p>
+      <span>
         {user.name} logged in<button onClick={handleLogout}>Logout</button>
-      </p>
+      </span>
     )
   }
 
@@ -167,12 +166,23 @@ const App = () => {
     ? blogs.find((blogi) => blogi.id === blogMatch.params.id)
     : null
 
+    const padding = {
+      padding:5
+    }
 
   return (
     <div>
-      <h2>blogs</h2>
-      <Notification notification={notification} />
+      <header style={{backgroundColor:'lightgrey', padding:10}}>
+        
+        <Link style={padding} to='/'>Blogs</Link>
+        <Link style={padding} to='/users'>Users</Link>
       {user === null ? loginForm() : loggedUser()}
+
+        
+
+      </header>
+      <h2>Blog App</h2>
+      <Notification notification={notification} />
       <Switch>
         <Route path="/users/:id">
           <User user={userToUserpage} />
