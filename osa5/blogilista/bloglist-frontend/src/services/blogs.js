@@ -34,7 +34,6 @@ const removeOne = async (blog) => {
     headers: { Authorization: token },
   }
   const response = await axios.delete(url, config)
-  console.log('axiosresponse', response)
   return response.data
 }
 

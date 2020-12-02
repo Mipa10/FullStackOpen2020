@@ -10,10 +10,10 @@ const userReducer = (state = initialState, action) => {
 }
 
 export const addUser = (user) => {
-    return {
-        type:'ADD_CURRENT_USER',
-        data: user
-    }
+  return {
+    type: 'ADD_CURRENT_USER',
+    data: user,
+  }
 }
 
 export default userReducer

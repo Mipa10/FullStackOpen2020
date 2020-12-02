@@ -1,10 +1,7 @@
-import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { addLike, removeBlog } from '../reducers/blogReducer'
-import blogService from '../services/blogs'
+import React from 'react'
 
-const Blog = ({ blog, isSameUser }) => {
-  const dispatch = useDispatch()
+
+const Blog = ({ blog }) => {
   const blogStyle = {
     borderStyle: 'solid',
     borderRadius: 5,
@@ -12,61 +9,10 @@ const Blog = ({ blog, isSameUser }) => {
     marginTop: 3,
     paddingTop: 5,
   }
-  const [visible, setVisible] = useState(false)
-
-  const hideWhenVisible = { display: visible ? 'none' : 'inline-block' }
-  const showWhenVisible = { display: visible ? 'inline-block' : 'none' }
-
-  const toggleVisibility = () => {
-    setVisible(!visible)
-  }
-
-  const handleLikeClick = async () => {
-    const newLikes = blog.likes + 1
-    const updatedBlog = { ...blog, likes: newLikes }
-    const response = await blogService.update(updatedBlog)
-    dispatch(addLike(response))
-  }
-
-  const remove = async () => {
-    if (window.confirm(`Remove ${blog.title} by ${blog.author}`)) {
-      await blogService.removeOne(blog)
-      dispatch(removeBlog(blog))
-    }
-  }
-
-  const showRemoveBlog = () => {
-    if (isSameUser(blog)) {
-      return (
-        <button
-          onClick={remove}
-          style={{ backgroundColor: 'blue', borderRadius: 5 }}
-        >
-          Remove
-        </button>
-      )
-    }
-  }
 
   return (
     <div className="blog" style={blogStyle}>
       {blog.title} {blog.author}
-      <div style={hideWhenVisible}>
-        <button onClick={toggleVisibility}>view</button>
-      </div>
-      <div style={showWhenVisible}>
-        <button onClick={toggleVisibility}>hide</button>
-      </div>
-      <br />
-      <div className="hidedElements" style={showWhenVisible}>
-        {blog.url} <br />
-        likes: <span className="likes">{blog.likes}</span>
-        <button onClick={handleLikeClick}>like</button>
-        <br />
-        Added by: {blog.user.name}
-        <br />
-        {showRemoveBlog()}
-      </div>
     </div>
   )
 }

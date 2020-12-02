@@ -4,8 +4,6 @@ import { Link } from 'react-router-dom'
 const Users = (props) => {
   const allUsers = props.users
 
-  
-
   return (
     <div>
       <h2>Users</h2>

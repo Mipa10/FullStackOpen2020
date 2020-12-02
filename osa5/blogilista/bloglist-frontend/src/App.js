@@ -13,11 +13,12 @@ import {
 import { initializeBlogs, addNewBlog } from './reducers/blogReducer'
 import { addUser } from './reducers/userReducer'
 import { useDispatch, useSelector } from 'react-redux'
-import { Switch, Route, useRouteMatch } from 'react-router-dom'
+import { Switch, Route, Link, useRouteMatch } from 'react-router-dom'
 import Users from './components/Users'
 import User from './components/User'
 import userService from './services/users'
 import { initUsers } from './reducers/usersReducer'
+import BlogPage from './components/BlogPage'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -131,13 +132,6 @@ const App = () => {
     )
   }
 
-  const isSameUser = (blog) => {
-    if (blog.user.username === user.username) {
-      return true
-    } else {
-      return false
-    }
-  }
 
   const sortedBlogsByLikes = () => {
     const sortedBlogs = blogs.sort((a, b) => {
@@ -146,7 +140,9 @@ const App = () => {
     return (
       <div id="blogit">
         {sortedBlogs.map((blog) => (
-          <Blog isSameUser={isSameUser} key={blog.id} blog={blog} />
+          <Link key={blog.id+1} to={`/blogs/${blog.id}`}>
+            <Blog key={blog.id} blog={blog} />
+          </Link>
         ))}
       </div>
     )
@@ -160,11 +156,17 @@ const App = () => {
     )
   }
 
-  const match = useRouteMatch('/users/:id')
-
-  const userPage = match
-    ? users.find((useri) => useri.id === match.params.id)
+  const userMatch = useRouteMatch('/users/:id')
+  const userToUserpage = userMatch
+    ? users.find((useri) => useri.id === userMatch.params.id)
     : null
+
+  const blogMatch = useRouteMatch('/blogs/:id')
+
+  const blogToBlogpage = blogMatch
+    ? blogs.find((blogi) => blogi.id === blogMatch.params.id)
+    : null
+
 
   return (
     <div>
@@ -173,7 +175,10 @@ const App = () => {
       {user === null ? loginForm() : loggedUser()}
       <Switch>
         <Route path="/users/:id">
-          <User user={userPage} />
+          <User user={userToUserpage} />
+        </Route>
+        <Route path="/blogs/:id">
+          <BlogPage blog={blogToBlogpage} />
         </Route>
         <Route path="/users">
           <Users users={users} />

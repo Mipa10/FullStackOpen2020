@@ -11,7 +11,7 @@ const blogReducer = (state = initialState, action) => {
       return state.map((blog) => (blog.id === id ? action.data : blog))
     case 'REMOVE':
       const iidee = action.data.id
-      return state.filter(element => element.id !== iidee)
+      return state.filter((element) => element.id !== iidee)
     default:
       return state
   }
