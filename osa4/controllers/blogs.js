@@ -3,6 +3,7 @@ const { request } = require("express");
 const jwt = require("jsonwebtoken");
 
 const Blog = require("../models/blog");
+
 const User = require("../models/user");
 
 blogsRouter.get("/", (request, response) => {
@@ -64,5 +65,25 @@ blogsRouter.put("/:id", (req, res) => {
     })
     .catch((error) => next(error));
 });
+
+blogsRouter.post("/:id/comments", async (req, res) => {
+  
+
+  const blogToUpdate = await Blog.findById(req.params.id)
+
+  blogToUpdate.comments = blogToUpdate.comments.concat(req.body.comment)
+
+  console.log('blogtoupdate', blogToUpdate)
+  //console.log('newblog', newBlog)
+  
+
+  Blog.findByIdAndUpdate(req.params.id, blogToUpdate, { new: true })
+    .then((updatedBlog) => {
+      res.json(updatedBlog.toJSON());
+    })
+    .catch((error) => next(error));
+});
+
+
 
 module.exports = blogsRouter;

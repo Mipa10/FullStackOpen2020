@@ -62,6 +62,13 @@ const BlogPage = (props) => {
       </p>
       <p>added by {blog.user.name}</p>
       {showRemoveBlog()}
+
+      <h3>comments</h3>
+      <ul>
+        {blog.comments.map((comment) => {
+          return <li>{comment}</li>
+        })}
+      </ul>
     </div>
   )
 }

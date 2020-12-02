@@ -16,3 +16,14 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1pa
 ###
 DELETE http://localhost:3001/api/blogs/5fc557ac9f8d9c452415211a
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1pa2tvbWlra28iLCJpZCI6IjVmOTU1YTVlNDc2ZTM3NDc5NDEzZDEyMCIsImlhdCI6MTYwMzYyMzU1MH0.pD4oJMqMDvkLu3W64Q1SUOLOAeQHl29p4xAfrFM7RrI
+
+###
+
+POST http://localhost:3001/api/blogs/5fc582c845732a3c2cfc6343/comments
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1pa2tvbWlra28iLCJpZCI6IjVmOTU1YTVlNDc2ZTM3NDc5NDEzZDEyMCIsImlhdCI6MTYwMzYyMzU1MH0.pD4oJMqMDvkLu3W64Q1SUOLOAeQHl29p4xAfrFM7RrI
+
+{
+     "comment": "kommentt"
+
+}
