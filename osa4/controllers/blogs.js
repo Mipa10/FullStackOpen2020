@@ -71,7 +71,7 @@ blogsRouter.post("/:id/comments", async (req, res) => {
 
   const blogToUpdate = await Blog.findById(req.params.id)
 
-  blogToUpdate.comments = blogToUpdate.comments.concat(req.body.comment)
+  blogToUpdate.comments = await blogToUpdate.comments.concat(req.body.comment)
 
   console.log('blogtoupdate', blogToUpdate)
   //console.log('newblog', newBlog)

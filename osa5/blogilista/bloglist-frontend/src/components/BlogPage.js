@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addLike, removeBlog } from '../reducers/blogReducer'
+import { updateBlog, removeBlog } from '../reducers/blogReducer'
 import { useHistory } from 'react-router-dom'
 import blogService from '../services/blogs'
 
@@ -9,6 +9,7 @@ const BlogPage = (props) => {
   const user = useSelector((state) => state.user)
   const history = useHistory()
   const blog = props.blog
+  const [comment, setComments] = useState('')
 
   if (!blog) {
     return null
@@ -18,7 +19,7 @@ const BlogPage = (props) => {
     const newLikes = blog.likes + 1
     const updatedBlog = { ...blog, likes: newLikes }
     const response = await blogService.update(updatedBlog)
-    dispatch(addLike(response))
+    dispatch(updateBlog(response))
   }
 
   const isSameUser = (blog) => {
@@ -49,6 +50,35 @@ const BlogPage = (props) => {
       )
     }
   }
+  const handleCommentAdd = async (event) => {
+    event.preventDefault()
+
+    const response = await blogService.addComment(comment, blog.id)
+    dispatch(updateBlog(response))
+  }
+
+  const onCommentChange = (event) => {
+    setComments(event.target.value)
+  }
+
+  const commentForm = () => {
+    return (
+      <form onSubmit={handleCommentAdd}>
+        <div>
+          <input
+            id="commentt"
+            type="text"
+            name="commentt"
+            value={comment}
+            onChange={onCommentChange}
+          />
+        </div>
+        <button id="create" type="submit">
+          Send
+        </button>
+      </form>
+    )
+  }
 
   return (
     <div>
@@ -64,9 +94,10 @@ const BlogPage = (props) => {
       {showRemoveBlog()}
 
       <h3>comments</h3>
+      {commentForm()}
       <ul>
         {blog.comments.map((comment) => {
-          return <li>{comment}</li>
+          return <li key={comment}>{comment}</li>
         })}
       </ul>
     </div>
