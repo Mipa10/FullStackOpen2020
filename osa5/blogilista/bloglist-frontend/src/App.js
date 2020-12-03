@@ -19,6 +19,7 @@ import User from './components/User'
 import userService from './services/users'
 import { initUsers } from './reducers/usersReducer'
 import BlogPage from './components/BlogPage'
+import { Form, Button } from 'react-bootstrap'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -96,31 +97,32 @@ const App = () => {
 
   const loginForm = () => {
     return (
-      <form id="loginform" onSubmit={handleLogin}>
-        <div>
-          username
-          <input
+      <Form id="loginform" onSubmit={handleLogin}>
+        <Form.Group>
+          <Form.Label>username:</Form.Label>
+          <Form.Control
             id="username"
             type="text"
             value={username}
             name="Username"
             onChange={({ target }) => setUsername(target.value)}
           />
-        </div>
-        <div>
-          password
-          <input
+
+          <Form.Label>password</Form.Label>
+
+          <Form.Control
             id="password"
             type="text"
             value={password}
             name="Password"
             onChange={({ target }) => setPassword(target.value)}
           />
-        </div>
-        <button id="loginbutton" type="submit">
-          login
-        </button>
-      </form>
+
+          <Button variant="primary" id="loginbutton" type="submit">
+            login
+          </Button>
+        </Form.Group>
+      </Form>
     )
   }
 
@@ -166,20 +168,20 @@ const App = () => {
     ? blogs.find((blogi) => blogi.id === blogMatch.params.id)
     : null
 
-    const padding = {
-      padding:5
-    }
+  const padding = {
+    padding: 5,
+  }
 
   return (
-    <div>
-      <header style={{backgroundColor:'lightgrey', padding:10}}>
-        
-        <Link style={padding} to='/'>Blogs</Link>
-        <Link style={padding} to='/users'>Users</Link>
-      {user === null ? loginForm() : loggedUser()}
-
-        
-
+    <div class="container">
+      <header style={{ backgroundColor: 'lightgrey', padding: 10 }}>
+        <Link style={padding} to="/">
+          Blogs
+        </Link>
+        <Link style={padding} to="/users">
+          Users
+        </Link>
+        {user === null ? loginForm() : loggedUser()}
       </header>
       <h2>Blog App</h2>
       <Notification notification={notification} />
