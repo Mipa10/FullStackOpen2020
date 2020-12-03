@@ -1,6 +1,5 @@
 import React from 'react'
 import {Alert} from 'react-bootstrap'
-import notificationReducer from '../reducers/notificationReducer'
 
 
 const Notification = ({ notification }) => {

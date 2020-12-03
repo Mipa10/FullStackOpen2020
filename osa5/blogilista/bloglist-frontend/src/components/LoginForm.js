@@ -1,10 +1,25 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { Form, Button } from 'react-bootstrap'
-
+import blogService from '../services/blogs'
+import { useDispatch } from 'react-redux'
+import { addUser } from '../reducers/userReducer'
+import {
+  addNotification,
+  removeNotification,
+} from '../reducers/notificationReducer'
+import loginService from '../services/login'
 
 const LoginForm = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const dispatch = useDispatch()
+
+  const notifyWith = (message, type = 'success') => {
+    dispatch(addNotification({ message, type }))
+    setTimeout(() => {
+      dispatch(removeNotification())
+    }, 5000)
+  }
 
   const handleLogin = async (event) => {
     event.preventDefault()
